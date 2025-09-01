@@ -7,15 +7,24 @@ const authRoutes = require("./routes/auth");
 const sensorRoutes = require("./routes/sensor");
 
 const app = express();
+
+// Middleware
 app.use(bodyParser.json());
 app.use(cors());
 
-mongoose.connect("mongodb+srv://admin:admin123@cluster0.9wqyyos.mongodb.net/koa360", 
-  { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log("✅ MongoDB Connected"))
-  .catch(err => console.log(err));
+// MongoDB connection
+const MONGO_URI = "mongodb+srv://admin:admin123@cluster0.9wqyyos.mongodb.net/koa360";
 
+mongoose.connect(MONGO_URI)
+  .then(() => console.log("✅ MongoDB Connected"))
+  .catch((err) => {
+    console.error("❌ MongoDB Connection Error:", err.message);
+  });
+
+// Routes
 app.use("/", authRoutes);
 app.use("/", sensorRoutes);
 
-app.listen(5000, () => console.log("🚀 Server running on port 5000"));
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

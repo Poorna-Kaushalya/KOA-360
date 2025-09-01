@@ -1,11 +1,21 @@
 import { useState } from "react";
-import Login from "./Login";
-import Dashboard from "./Dashboard";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
 
-  return token ? <Dashboard token={token}/> : <Login setToken={setToken}/>;
+  // Optional: auto-logout if token becomes invalid
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setToken(null);
+  };
+
+  return token ? (
+    <Dashboard token={token} logout={handleLogout} />
+  ) : (
+    <Login setToken={setToken} />
+  );
 }
 
 export default App;
