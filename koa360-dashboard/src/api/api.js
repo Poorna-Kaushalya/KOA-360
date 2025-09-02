@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "http://192.168.8.102:5000", // your backend
+  baseURL: "http://192.168.8.102:5000", 
 });
 
 // Attach token automatically
