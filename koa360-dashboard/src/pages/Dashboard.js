@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
 import api from "../api/api";
-import Navbar from "../components/Navbar"; // adjust path if needed
+import Navbar2 from "../components/SignInNavbar";
 
 function Dashboard({ logout }) {
   const [data, setData] = useState([]);
@@ -28,7 +28,7 @@ function Dashboard({ logout }) {
 
   return (
     <div>
-      <Navbar logout={logout} />
+      <Navbar2 logout={logout} />
       <div className="p-8">
         <h1 className="text-3xl font-bold mb-6">KOA 360 Dashboard</h1>
         <LineChart width={800} height={400} data={data}>
