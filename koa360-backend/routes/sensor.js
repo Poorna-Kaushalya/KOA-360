@@ -12,7 +12,7 @@ function authMiddleware(req, res, next) {
   if (!token) return res.status(401).json({ error: "No token" });
 
   jwt.verify(token.split(" ")[1], JWT_SECRET, (err, decoded) => {
-    if(err) return res.status(401).json({ error: "Invalid token" });
+    if (err) return res.status(401).json({ error: "Invalid token" });
     req.user = decoded;
     next();
   });
@@ -24,7 +24,7 @@ router.post("/api/sensor-data", async (req, res) => {
     const newData = new RawSensorData(req.body);
     await newData.save();
     res.json({ success: true });
-  } catch(err) {
+  } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
@@ -35,27 +35,50 @@ router.get("/api/sensor-data", authMiddleware, async (req, res) => {
   res.json(data);
 });
 
+//Device status
+router.get("/api/device-status", async (req, res) => {
+  try {
+    const latest = await RawSensorData.findOne().sort({ createdAt: -1 });
+    if (!latest) return res.json({ connected: false });
+
+    const now = Date.now();
+    const diff = now - new Date(latest.createdAt).getTime();
+
+    res.json({ connected: diff < 10000 });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Every 5 minutes calculate averages and delete raw
 setInterval(async () => {
-  const fiveMinutesAgo = new Date(Date.now() - 5*60*1000);
-  const rawData = await RawSensorData.find({ createdAt: { $gte: fiveMinutesAgo } });
+  const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+  const rawData = await RawSensorData.find({
+    createdAt: { $gte: fiveMinutesAgo },
+  });
 
-  if(rawData.length > 0){
+  if (rawData.length > 0) {
     const device_id = rawData[0].device_id;
-    let sum_ax = 0, sum_ay = 0, sum_az = 0;
-    rawData.forEach(d => { sum_ax+=d.ax; sum_ay+=d.ay; sum_az+=d.az; });
+    let sum_ax = 0,
+      sum_ay = 0,
+      sum_az = 0;
+    rawData.forEach((d) => {
+      sum_ax += d.ax;
+      sum_ay += d.ay;
+      sum_az += d.az;
+    });
 
     const avgData = new AvgSensorData({
       device_id,
-      avg_ax: sum_ax/rawData.length,
-      avg_ay: sum_ay/rawData.length,
-      avg_az: sum_az/rawData.length
+      avg_ax: sum_ax / rawData.length,
+      avg_ay: sum_ay / rawData.length,
+      avg_az: sum_az / rawData.length,
     });
 
     await avgData.save();
-    await RawSensorData.deleteMany({ _id: { $in: rawData.map(d => d._id) } });
+    await RawSensorData.deleteMany({ _id: { $in: rawData.map((d) => d._id) } });
     console.log(`Saved 5-min average & deleted ${rawData.length} raw entries`);
   }
-}, 5*60*1000);
+}, 5 * 60 * 1000);
 
 module.exports = router;
