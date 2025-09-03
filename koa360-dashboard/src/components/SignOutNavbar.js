@@ -58,7 +58,7 @@ function SignOutNavbar({ isLoggedIn }) {
             <div className="hidden md:block">
               <button
                 className="bg-green-600 px-4 py-2 text-white rounded-lg hover:bg-green-600 transition shadow-md"
-                onClick={() => (window.location.href = "/login")}
+                onClick={() => (window.location.href = "/Register")}
               >
                 <b>New User</b>
               </button>

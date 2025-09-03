@@ -1,24 +1,36 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"; // <-- import
 import api from "../api/api";
 import backgroundImg from "../images/background.jpg";
 import SignOutNavbar from "../components/SignOutNavbar";
 import logo from "../images/Logo.png";
 
-function Login({ setToken }) {
+function Login({ setToken, setRole }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [userType, setUserType] = useState("doctor");
   const [error, setError] = useState("");
+  const navigate = useNavigate(); // <-- initialize navigate
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setError("");
+
     try {
-      const res = await api.post("/login", { username, password });
+      const res = await api.post(`/login/${userType}`, { username, password });
       const token = res.data.token;
+
       localStorage.setItem("token", token);
+      localStorage.setItem("role", userType);
       setToken(token);
+      setRole(userType);
+
+      // ✅ Redirect to dashboard
+      navigate("/dashboard");
     } catch (err) {
-      setError(err.response?.data?.error || "Login failed");
+      setError(
+        err.response?.data?.error || "User not found or invalid password"
+      );
     }
   };
 
@@ -27,7 +39,6 @@ function Login({ setToken }) {
       className="min-h-screen bg-cover bg-center flex items-start"
       style={{ backgroundImage: `url(${backgroundImg})` }}
     >
-      {/* Include Sign-in Navbar */}
       <SignOutNavbar />
       <img
         src={logo}
@@ -35,10 +46,9 @@ function Login({ setToken }) {
         className="w-84 h-36 mx-72 my-36 shadow-xl rounded-3xl"
       />
 
-      {/* Card */}
-      <div className="absolute top-[36rem] left-[33rem] w-[450px] rounded-2xl p-8 transform -translate-x-1/2">
-        <h2 className="text-3xl font-bold text-left text-gray-900 dark:text-dark mb-6">
-          Login 🔑
+      <div className="absolute top-[34rem] left-[33rem] w-[450px] rounded-2xl p-8 transform -translate-x-1/2">
+        <h2 className="text-3xl font-bold text-left text-gray-900 mb-6">
+          🔑 Login as
         </h2>
 
         {error && (
@@ -46,65 +56,68 @@ function Login({ setToken }) {
         )}
 
         <form onSubmit={handleLogin} className="space-y-5">
-          {/* Username & Password on same line */}
-          <div className="flex space-x-4">
-            {/* Username */}
-            <div className="flex-1">
-              <label
-                htmlFor="username"
-                className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-800"
-              >
-                Username
-              </label>
+          <div className="flex items-center space-x-6 absolute top-[29px] left-[170px]">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <label className="flex items-center space-x-2 text-lg">
               <input
-                type="text"
-                id="username"
-                placeholder="Enter your username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-4 py-2 border rounded-lg border-gray-300 dark:border-gray-600  text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
-                required
+                type="radio"
+                name="userType"
+                value="doctor"
+                checked={userType === "doctor"}
+                onChange={(e) => setUserType(e.target.value)}
+                className="w-5 h-5 accent-blue-600"
               />
-            </div>
+              <span><b>Doctor</b></span>
+            </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-            {/* Password */}
-            <div className="flex-1">
-              <label
-                htmlFor="password"
-                className="block mb-2 text-sm font-medium text-gray-700 dark:text-gray-800"
-              >
-                Password
-              </label>
+            <label className="flex items-center space-x-2 text-lg ">
               <input
-                type="password"
-                id="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2 border rounded-lg border-gray-300 dark:border-gray-600 text-gray-900  focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
-                required
+                type="radio"
+                name="userType"
+                value="patient"
+                checked={userType === "patient"}
+                onChange={(e) => setUserType(e.target.value)}
+                className="w-4 h-4 accent-blue-600"
               />
-            </div>
-          </div>
-
-          {/* Remember me + Forgot */}
-          <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-800">
-            <label className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                className="w-4 h-4 rounded border-gray-300 dark:border-gray-800 focus:ring-indigo-800"
-              />
-              <span>Remember me</span>
+              <span><b>Patient</b></span>
             </label>
-            <a
-              href="#"
-              className="text-indigo-600 hover:underline dark:text-indigo-500"
-            >
-              <b>Forgot password?</b>
-            </a>
           </div>
 
-          {/* Button */}
+          <div>
+            <label
+              htmlFor="username"
+              className="block mb-2 text-sm font-medium text-gray-700"
+            >
+              Username
+            </label>
+            <input
+              type="text"
+              id="username"
+              placeholder="Enter your username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full px-4 py-2 border rounded-lg border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+              required
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="password"
+              className="block mb-2 text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-2 border rounded-lg border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"
+              required
+            />
+          </div>
+
           <button
             type="submit"
             className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
