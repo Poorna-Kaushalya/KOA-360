@@ -28,57 +28,53 @@ function SignOutNavbar({ isLoggedIn }) {
   return (
     <div className="fixed w-full z-50">
       {/* Main Navbar */}
-      <nav className="fixed w-full z-50 shadow-md rounded-b-2xl">
-        <div className="max-w-9xl mx-auto px-6 py-4 flex  items-center">
-          {/* Logo */}
-          <div className="text-4xl font-extrabold tracking-wide text-blue-700">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;KneeCare&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          </div>
-          {/* Links */}
-          <div className="hidden md:flex gap-8">
-            {publicLinks.map((link) => (
+      <nav className="fixed w-full z-50 rounded-b-2xl ">
+        <div className="max-w-9xl mx-auto px-6 py-4 flex items-center justify-between">
+          {/* Left-side items: Logo + Links + New User */}
+          <div className="flex items-center gap-6">
+            {/* Logo */}
+            <div className="text-4xl font-extrabold tracking-wide text-blue-700 mx-5">
+              KneeCare
+            </div>
+
+            {/* Links */}
+            <div className="hidden md:flex gap-8 mx-10">
+              {publicLinks.map((link) => (
+                <button
+                  key={link}
+                  onClick={() => setActive(link)}
+                  className={`font-semibold px-4 py-2 rounded-lg transition-all duration-300 ${
+                    active === link
+                      ? "bg-blue-600 text-white shadow-lg"
+                      : "text-blue-700 hover:bg-blue-100 hover:text-blue-900"
+                  }`}
+                >
+                  {link}
+                </button>
+              ))}
+            </div>
+
+            {/* New User */}
+            <div className="hidden md:block">
               <button
-                key={link}
-                onClick={() => setActive(link)}
-                className={`font-semibold px-6 py-2 rounded-lg transition-all duration-300 ${
-                  active === link
-                    ? "bg-blue-600 text-white shadow-lg"
-                    : "text-blue-700 hover:bg-blue-100 hover:text-blue-900"
-                }`}
+                className="bg-green-600 px-4 py-2 text-white rounded-lg hover:bg-green-600 transition shadow-md"
+                onClick={() => (window.location.href = "/login")}
               >
-                {link}
+                <b>New User</b>
               </button>
-            ))}
+            </div>
           </div>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          {/* Login/Register */}
-          <div className="hidden md:block">
-            <button
-              className="bg-green-600 px-4 py-2 text-white rounded-lg hover:bg-green-600 transition shadow-md"
-              onClick={() => (window.location.href = "/login")}
-            >
-              <b>New User</b>
-            </button>
+
+          {/* Right-side item: Date & Time */}
+          <div className="text-white font-bold text-xl">
+            {formattedDateTime}
           </div>
+
           {/* Mobile Menu Toggle */}
-          <div className="md:hidden">
+          <div className="md:hidden absolute right-6">
             <button onClick={() => setMenuOpen(!menuOpen)}>
               {menuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
             </button>
-          </div>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          {/* Top Bar with Date & Time */}
-          <div className="text-white text-2xl text-right px-0 py-1 ">
-            <b>
-              <span>{formattedDateTime}</span>
-            </b>
           </div>
         </div>
 

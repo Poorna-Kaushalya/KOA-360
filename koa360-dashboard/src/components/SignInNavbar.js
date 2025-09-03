@@ -27,7 +27,7 @@ function SignInNavbar({ logout }) {
   useEffect(() => {
     const checkConnection = async () => {
       try {
-        const res = await fetch("http://192.168.8.102:5000/api/device-status"); // <-- update API
+        const res = await fetch("http://192.168.8.102:5000/api/device-status");
         const data = await res.json();
         setConnected(data.connected);
       } catch (err) {
