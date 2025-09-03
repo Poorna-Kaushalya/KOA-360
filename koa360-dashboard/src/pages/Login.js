@@ -29,10 +29,14 @@ function Login({ setToken }) {
     >
       {/* Include Sign-in Navbar */}
       <SignOutNavbar />
-      <img src={logo} alt="Project Logo" className="w-84 h-36 mb-6 mt-36 ml-64 border border-dark-600 shadow-xl rounded-3xl" />
+      <img
+        src={logo}
+        alt="Project Logo"
+        className="w-84 h-36 mx-72 my-36 shadow-xl rounded-3xl"
+      />
 
       {/* Card */}
-      <div className="absolute top-[400px] left-[130px] w-[450px] rounded-2xl  p-8 backdrop-blur-sm m-8">
+      <div className="absolute top-[36rem] left-[33rem] w-[450px] rounded-2xl p-8 transform -translate-x-1/2">
         <h2 className="text-3xl font-bold text-left text-gray-900 dark:text-dark mb-6">
           Login 🔑
         </h2>
