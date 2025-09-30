@@ -56,7 +56,8 @@ function Login({ setToken, setRole }) {
         )}
 
         <form onSubmit={handleLogin} className="space-y-5">
-          <div className="flex items-center space-x-6 absolute top-[29px] left-[170px]">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <div className="flex items-center space-x-6 absolute top-[29px] left-[170px]">
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <label className="flex items-center space-x-2 text-lg">
               <input
                 type="radio"
@@ -66,9 +67,11 @@ function Login({ setToken, setRole }) {
                 onChange={(e) => setUserType(e.target.value)}
                 className="w-5 h-5 accent-blue-600"
               />
-              <span><b>Doctor</b></span>
-            </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
+              <span>
+                <b>Doctor</b>
+              </span>
+            </label>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <label className="flex items-center space-x-2 text-lg ">
               <input
                 type="radio"
@@ -78,7 +81,9 @@ function Login({ setToken, setRole }) {
                 onChange={(e) => setUserType(e.target.value)}
                 className="w-4 h-4 accent-blue-600"
               />
-              <span><b>Patient</b></span>
+              <span>
+                <b>Patient</b>
+              </span>
             </label>
           </div>
 
